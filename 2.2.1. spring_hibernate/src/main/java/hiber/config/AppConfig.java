@@ -2,6 +2,7 @@ package hiber.config;
 
 import hiber.model.User;
 import hiber.model.Car;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,8 +24,12 @@ import java.util.Properties;
 @ComponentScan(value = "hiber")
 public class AppConfig {
 
+   private final Environment env;
+
    @Autowired
-   private Environment env;
+   public AppConfig(Environment env) {
+      this.env = env;
+   }
 
    @Bean
    public DataSource getDataSource() {
@@ -37,9 +42,9 @@ public class AppConfig {
    }
 
    @Bean
-   public LocalSessionFactoryBean getSessionFactory() {
+   public LocalSessionFactoryBean getSessionFactory(DataSource dataSource) {
       LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-      factoryBean.setDataSource(getDataSource());
+      factoryBean.setDataSource(dataSource);
       
       Properties props=new Properties();
       props.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
@@ -51,9 +56,9 @@ public class AppConfig {
    }
 
    @Bean
-   public HibernateTransactionManager getTransactionManager() {
+   public HibernateTransactionManager getTransactionManager(LocalSessionFactoryBean sessionFactory) {
       HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-      transactionManager.setSessionFactory(getSessionFactory().getObject());
+      transactionManager.setSessionFactory(sessionFactory.getObject());
       return transactionManager;
    }
 }

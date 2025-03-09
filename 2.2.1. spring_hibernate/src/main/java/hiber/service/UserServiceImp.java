@@ -28,8 +28,8 @@ public class UserServiceImp implements UserService {
       return userDao.listUsers();
    }
 
-   public User FindCarUser(String model, int series) {
-      return userDao.FindCarUser(model, series);
+   public User getCarByModelAndSeries(String model, int series) {
+      return userDao.getCarByModelAndSeries(model, series);
    }
 
 }

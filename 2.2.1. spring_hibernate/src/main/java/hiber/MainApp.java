@@ -32,7 +32,7 @@ public class MainApp {
             System.out.println("Car = " + user.getCar());
             System.out.println("====================================");
         }
-        System.out.println("Владаелец телеги серии 555 = " + userService.FindCarUser("Telega", 552));
+        System.out.println("Владаелец телеги серии 555 = " + userService.getCarByModelAndSeries("Telega", 552));
 
         context.close();
     }
